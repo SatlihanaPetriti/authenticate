@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router';
+import { useUserContext } from '../../../Context/User';
 
 const Login = () => {
+    const { login } = useUserContext();
     const [values, setValues] = useState({ email: "", password: "" });
 
 
@@ -16,9 +18,14 @@ const Login = () => {
         })
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log("values---", values);
+        try {
+            const result = await login(values);
+            return result;
+        } catch (error) {
+            console.error("Login error:", error);
+        }
 
     };
 
@@ -32,6 +39,7 @@ const Login = () => {
                             <Form.Label>Email address</Form.Label>
                             <Form.Control
                                 type="email"
+                                name="email"
                                 placeholder="Enter email"
                                 value={values.email}
                                 onChange={handleChange}
@@ -42,6 +50,7 @@ const Login = () => {
                             <Form.Label>Password</Form.Label>
                             <Form.Control
                                 type="password"
+                                name="password"
                                 placeholder="Password"
                                 value={values.password}
                                 onChange={handleChange}

@@ -3,6 +3,7 @@ import { useUserContext } from "../../Context/User";
 
 const AdminRoute = ({ children }) => {
     const { user, isAuthChecked } = useUserContext();
+    console.log("user in admin route---", user);
 
     if (!isAuthChecked) {
         return <div>Loading...</div>;

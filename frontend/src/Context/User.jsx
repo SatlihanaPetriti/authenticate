@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { register_user, login_user, logout_user } from "../services/user";
+import { register_user, login_user, logout_user, checkAuth_user } from "../services/user";
 
 const UserContext = createContext({});
 
@@ -26,10 +26,13 @@ const UserProvider = (props) => {
     const login = async (data) => {
         try {
             const result = await login_user(data);
-            if (result.status === 200) {
+            if (result.status === 201) {
                 setUser(result.data);
+                setTrigger(!trigger);
+                return result.data;
             }
         } catch (error) {
+            console.log("Login error:", error);
             throw error.response.data;
         }
     }
@@ -49,7 +52,7 @@ const UserProvider = (props) => {
 
     const checkAuthUser = async () => {
         try {
-            const result = await checkAuth_user_service();
+            const result = await checkAuth_user();
             if (result.status === 200) {
                 setUser(...result.data);
             } else {
